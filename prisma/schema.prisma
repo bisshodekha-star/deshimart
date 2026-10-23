@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  nameEn   String
+  icon     String    @default("Package")
+  products Product[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  price       Int
+  oldPrice    Int?
+  image       String
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  stock       Int         @default(50)
+  rating      Float       @default(4.5)
+  reviews     Int         @default(0)
+  featured    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNo       String      @unique
+  customerName  String
+  phone         String
+  address       String
+  note          String?
+  paymentMethod String      @default("cod")
+  total         Int
+  status        String      @default("পেন্ডিং")
+  createdAt     DateTime    @default(now())
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Int
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   @default("system")
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
