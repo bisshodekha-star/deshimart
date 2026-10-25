@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { price, enToBn } from "@/lib/format";
 import type { Category, Product } from "@/lib/types";
 import { ProductCard } from "./product-card";
+import { STORE_NAME } from "@/lib/store-info";
 import type { View } from "./view-types";
 
 const CATEGORY_ICONS: Record<string, typeof Smartphone> = {
